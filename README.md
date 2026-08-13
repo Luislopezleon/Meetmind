@@ -79,11 +79,11 @@ The meeting intelligence agent is built with LangGraph, processing transcripts t
 ```mermaid
 graph TD;
     __start__([Meeting Transcript]):::first
-    extract_action_items(["🎯 Extract Action Items<br/><small>Tasks, assignees, deadlines</small>"])
-    extract_decisions(["⚖️ Extract Decisions<br/><small>Choices, impact, context</small>"])
-    extract_risks(["⚠️ Extract Risks<br/><small>Blockers, concerns, dependencies</small>"])
-    extract_questions(["❓ Extract Questions<br/><small>Unanswered items</small>"])
-    generate_summary(["📊 Generate Summary<br/><small>Executive summary with all insights</small>"])
+    extract_action_items([" Extract Action Items<br/><small>Tasks, assignees, deadlines</small>"])
+    extract_decisions([" Extract Decisions<br/><small>Choices, impact, context</small>"])
+    extract_risks([" Extract Risks<br/><small>Blockers, concerns, dependencies</small>"])
+    extract_questions([" Extract Questions<br/><small>Unanswered items</small>"])
+    generate_summary([" Generate Summary<br/><small>Executive summary with all insights</small>"])
     __end__([Analysis Complete]):::last
     __start__ --> extract_action_items;
     extract_action_items --> extract_decisions;
@@ -359,4 +359,4 @@ Backend / AI Engineer
 
 ---
 
-*Built as a technical portfolio project demonstrating: AI agent design (LangGraph), microservice architecture (FastAPI + PostgreSQL + Redis), real-time systems (WebSockets + pub/sub), and API integrations (Recall.ai + Gemini).*
+*Built as a technical project demonstrating: AI agent design (LangGraph), microservice architecture (FastAPI + PostgreSQL + Redis), real-time systems (WebSockets + pub/sub), and API integrations (Recall.ai + Gemini).*
