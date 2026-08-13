@@ -1,0 +1,5 @@
+# AI & ML (Phase 3: LangGraph Agent with Google Gemini)
+langchain-core>=1.5
+langchain>=1.3
+langgraph>=1.2
+langchain-google-genai>=4.3

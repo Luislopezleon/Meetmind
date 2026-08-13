@@ -1,0 +1,32 @@
+# FastAPI Core
+fastapi>=0.115
+uvicorn[standard]>=0.24
+pydantic>=2.5
+pydantic-settings>=2.1
+
+# Database
+sqlalchemy>=2.0
+alembic>=1.13
+psycopg2-binary>=2.9
+
+# Redis
+redis>=5.0
+
+# HTTP Client
+httpx>=0.28
+
+# WebSockets
+websockets>=12.0
+
+# Webhook verification (Recall.ai uses Svix)
+svix>=1.21
+
+# Utilities
+python-multipart>=0.0.6
+python-dotenv>=1.0
+loguru>=0.7
+
+# Testing
+pytest>=7.4
+pytest-asyncio>=0.21
+pytest-mock>=3.12

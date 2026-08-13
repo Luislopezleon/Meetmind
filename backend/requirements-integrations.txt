@@ -1,0 +1,3 @@
+# External integrations (install when starting Phase 6: Jira/Notion)
+jira==3.5.2
+notion-client==2.2.1

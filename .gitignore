@@ -1,0 +1,51 @@
+# Environment
+.env
+.env.local
+.env.production
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+venv/
+.venv/
+backend/venv/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+test.db
+
+# Docker
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+dashboard/node_modules/
+dashboard/.next/
+
+# Kiro
+.kiro/
+
+# Misc
+*.bak
+*.tmp
