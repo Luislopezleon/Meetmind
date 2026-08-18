@@ -380,3 +380,43 @@ async def get_meetings_stats(
             "risks": total_risks,
         },
     }
+
+
+@router.post("/{meeting_id}/fetch-and-analyze")
+async def fetch_and_analyze_meeting(
+    meeting_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Fetch transcript from Recall.ai and run the AI agent.
+    
+    Use this when webhooks are not configured — manually triggers
+    the full pipeline: fetch transcript → store → analyze → persist insights.
+    """
+    from app.services.transcript_service import fetch_and_store_transcript
+    
+    meeting = db.query(Meeting).filter(Meeting.id == meeting_id).first()
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Meeting not found")
+    
+    if not meeting.recall_bot_id:
+        raise HTTPException(status_code=400, detail="No bot associated with this meeting")
+    
+    # Fetch transcript
+    chunks = await fetch_and_store_transcript(meeting, db)
+    
+    if chunks == 0:
+        raise HTTPException(status_code=400, detail="No transcript available (meeting may still be in progress)")
+    
+    # Update status
+    meeting.status = "completed"
+    db.commit()
+    
+    # Run agent
+    result = await run_agent_on_meeting(meeting_id, db)
+    
+    return {
+        "meeting_id": meeting_id,
+        "transcript_chunks": chunks,
+        "analysis": result,
+    }
