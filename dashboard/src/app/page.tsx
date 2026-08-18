@@ -17,17 +17,7 @@ export default function LandingPage() {
 
       <main className="relative z-10">
         {/* HERO */}
-        <section className="max-w-5xl mx-auto px-6 pt-48 pb-32 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--border)] bg-[#0a0a0a] text-[11px] text-[var(--text-muted)] mb-8"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            Powered by LangGraph + Gemini
-          </motion.div>
-
+        <section className="max-w-5xl mx-auto px-6 pt-36 pb-32 text-center">
           <RevealText
             el="h1"
             text="Every meeting, understood."
@@ -131,6 +121,35 @@ export default function LandingPage() {
           >
             <Link href="/login" className="btn-primary text-base px-8 py-3">Get started free</Link>
           </motion.div>
+        </section>
+
+        {/* TECH MARQUEE */}
+        <section className="py-16 overflow-hidden border-t border-[var(--border)]">
+          <div className="relative">
+            <div className="flex animate-marquee gap-16 items-center">
+              {[...Array(2)].map((_, set) => (
+                <div key={set} className="flex gap-16 items-center shrink-0">
+                  {[
+                    { name: "FastAPI", svg: "⚡" },
+                    { name: "LangGraph", svg: "◇" },
+                    { name: "Google Gemini", svg: "✦" },
+                    { name: "Recall.ai", svg: "●" },
+                    { name: "PostgreSQL", svg: "◆" },
+                    { name: "Redis", svg: "◈" },
+                    { name: "Next.js", svg: "▲" },
+                    { name: "Docker", svg: "◉" },
+                    { name: "WebSockets", svg: "⟐" },
+                    { name: "TypeScript", svg: "◊" },
+                  ].map((tech) => (
+                    <div key={tech.name} className="flex items-center gap-2 opacity-30 hover:opacity-60 transition-opacity duration-300">
+                      <span className="text-sm">{tech.svg}</span>
+                      <span className="text-xs font-medium text-[var(--text-muted)] whitespace-nowrap">{tech.name}</span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
         {/* FOOTER */}
