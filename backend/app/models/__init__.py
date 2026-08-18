@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.db.database import Base
+from app.models.integrations import IntegrationConfig  # noqa: F401
 
 
 class Meeting(Base):

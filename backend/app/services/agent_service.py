@@ -16,6 +16,8 @@ from app.models import (
 )
 from app.agents.meeting_agent import analyze_meeting
 from app.db.redis import redis_manager
+from app.services.jira_service import jira_service
+from app.services.notion_service import notion_service
 
 
 async def run_agent_on_meeting(meeting_id: int, db: Session) -> dict:
@@ -92,6 +94,22 @@ async def run_agent_on_meeting(meeting_id: int, db: Session) -> dict:
     for chunk in chunks:
         chunk.processed_by_agent = True
     db.commit()
+    
+    # Sync action items to Jira (if configured)
+    try:
+        jira_count = await jira_service.sync_meeting_action_items(meeting_id, db)
+        if jira_count > 0:
+            logger.info(f"Synced {jira_count} action items to Jira for meeting {meeting_id}")
+    except Exception as e:
+        logger.warning(f"Jira sync failed (non-blocking): {e}")
+    
+    # Publish summary to Notion (if configured)
+    try:
+        notion_url = await notion_service.publish_meeting_summary(meeting, db)
+        if notion_url:
+            logger.info(f"Published meeting {meeting_id} to Notion: {notion_url}")
+    except Exception as e:
+        logger.warning(f"Notion publish failed (non-blocking): {e}")
     
     logger.info(
         f"Agent completed for meeting {meeting_id}: "

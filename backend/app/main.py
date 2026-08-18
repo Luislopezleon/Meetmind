@@ -11,6 +11,7 @@ from app.db.database import engine
 from app.db.redis import redis_manager
 from app.models import Base
 from app.api.routes import health, meetings, webhooks, websockets
+from app.api.routes.integrations import router as integrations_router
 from app.schemas import ErrorResponse
 
 
@@ -117,6 +118,7 @@ async def health_check_middleware(request: Request, call_next):
 app.include_router(health.router, prefix="/health", tags=["health"])
 app.include_router(meetings.router, prefix="/api/v1/meetings", tags=["meetings"])
 app.include_router(webhooks.router, prefix="/api/v1/webhooks", tags=["webhooks"])
+app.include_router(integrations_router, prefix="/api/v1/integrations", tags=["integrations"])
 app.include_router(websockets.router, prefix="/ws", tags=["websockets"])
 
 
