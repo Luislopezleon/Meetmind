@@ -3,43 +3,38 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const LINKS = [
-  { href: "/", label: "Meetings" },
-  { href: "/settings", label: "Settings" },
-];
-
 export function TopNav() {
   const pathname = usePathname();
 
+  const isSettings = pathname.startsWith("/app/settings");
+
   return (
-    <header className="w-full border-b border-[var(--border)] bg-[var(--bg-primary)]/80 backdrop-blur-xl sticky top-0 z-50">
-      <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--accent)] to-blue-600 flex items-center justify-center transition-shadow duration-300 group-hover:shadow-lg group-hover:shadow-blue-500/25">
-            <span className="text-white text-xs font-bold">M</span>
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--border)] bg-black/80 backdrop-blur-xl">
+      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-md bg-white flex items-center justify-center">
+            <span className="text-black text-[10px] font-black">M</span>
           </div>
-          <span className="text-sm font-semibold text-[var(--text-primary)]">MeetMind</span>
+          <span className="text-sm font-semibold tracking-tight">MeetMind</span>
         </Link>
 
-        {/* Nav links */}
-        <nav className="flex items-center gap-1">
-          {LINKS.map((link) => {
-            const isActive = link.href === "/" ? pathname === "/" || pathname.startsWith("/meetings") : pathname.startsWith(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-3 py-1.5 rounded-lg text-sm transition-all duration-200 ${
-                  isActive
-                    ? "text-[var(--text-primary)] bg-[var(--bg-tertiary)]"
-                    : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+        <nav className="flex items-center gap-8">
+          <Link
+            href="/app"
+            className={`text-sm transition-colors duration-200 ${
+              !isSettings ? "text-[var(--text)]" : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+            }`}
+          >
+            Meetings
+          </Link>
+          <Link
+            href="/app/settings"
+            className={`text-sm transition-colors duration-200 ${
+              isSettings ? "text-[var(--text)]" : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+            }`}
+          >
+            Settings
+          </Link>
         </nav>
       </div>
     </header>

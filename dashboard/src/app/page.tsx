@@ -1,114 +1,194 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getMeetings } from "@/lib/api";
-import type { Meeting } from "@/types";
+import { motion } from "framer-motion";
+import { LandingNav } from "@/components/LandingNav";
+import { DotGridBackground } from "@/components/DotGridBackground";
+import { RevealText } from "@/components/RevealText";
+import { MeetMockup } from "@/components/mockups/MeetMockup";
+import { TranscriptMockup } from "@/components/mockups/TranscriptMockup";
+import { InsightsMockup } from "@/components/mockups/InsightsMockup";
 
-export default function HomePage() {
-  const [meetings, setMeetings] = useState<Meeting[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getMeetings()
-      .then(setMeetings)
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
-
+export default function LandingPage() {
   return (
-    <div className="reveal">
-      {/* Page header */}
-      <div className="flex items-end justify-between mb-10">
-        <div>
-          <h1 className="text-3xl font-semibold text-[var(--text-primary)] tracking-tight">
-            Meetings
-          </h1>
-          <p className="text-[var(--text-muted)] mt-2 text-sm">
-            Record, transcribe, and extract insights from any meeting.
-          </p>
-        </div>
-        <Link href="/meetings/new" className="btn-primary">
-          New meeting
-        </Link>
-      </div>
+    <>
+      <DotGridBackground />
+      <LandingNav />
 
-      {/* Content */}
-      {loading ? (
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="card-static p-6 animate-pulse">
-              <div className="h-4 bg-[var(--bg-tertiary)] rounded w-1/4 mb-3" />
-              <div className="h-3 bg-[var(--bg-tertiary)] rounded w-2/5" />
-            </div>
-          ))}
-        </div>
-      ) : meetings.length === 0 ? (
-        <div className="card-static p-20 text-center reveal reveal-delay-1">
-          <div className="w-14 h-14 mx-auto mb-6 rounded-2xl bg-[var(--accent-dim)] flex items-center justify-center pulse-glow">
-            <span className="text-[var(--accent)] text-lg">◉</span>
+      <main className="relative z-10">
+        {/* HERO */}
+        <section className="max-w-5xl mx-auto px-6 pt-48 pb-32 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--border)] bg-[#0a0a0a] text-[11px] text-[var(--text-muted)] mb-8"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            Powered by LangGraph + Gemini
+          </motion.div>
+
+          <RevealText
+            el="h1"
+            text="Every meeting, understood."
+            className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.1]"
+          />
+          <RevealText
+            el="h1"
+            text="Automatically."
+            delay={0.3}
+            className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.1] text-[var(--text-muted)]"
+          />
+
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            className="text-lg text-[var(--text-secondary)] max-w-xl mx-auto mt-6"
+          >
+            MeetMind sends an AI bot to your meetings. It transcribes, detects action items,
+            decisions, and risks — then hands you a clean summary. No note-taking required.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+            className="flex items-center justify-center gap-4 mt-10"
+          >
+            <Link href="/login" className="btn-primary">Get started free</Link>
+            <a href="#product" className="btn-secondary">See how it works</a>
+          </motion.div>
+        </section>
+
+        {/* PRODUCT SHOWCASE */}
+        <section id="product" className="max-w-6xl mx-auto px-6 py-24 space-y-40">
+          <ShowcaseRow
+            eyebrow="01 · Join"
+            title="It joins the call for you."
+            description="Paste any Google Meet, Zoom, or Teams link. Our bot joins silently, records, and starts transcribing — no plugins, no setup on your end."
+          >
+            <MeetMockup />
+          </ShowcaseRow>
+
+          <ShowcaseRow
+            eyebrow="02 · Transcribe"
+            title="Every word, captured live."
+            description="Real-time transcription with speaker identification streams straight to your dashboard as the conversation happens."
+            reverse
+          >
+            <TranscriptMockup />
+          </ShowcaseRow>
+
+          <ShowcaseRow
+            eyebrow="03 · Understand"
+            title="AI extracts what matters."
+            description="A LangGraph agent reads the transcript and pulls out action items, decisions, and risks — each with an assignee, confidence score, and context."
+          >
+            <InsightsMockup />
+          </ShowcaseRow>
+        </section>
+
+        {/* HOW IT WORKS */}
+        <section id="how-it-works" className="max-w-4xl mx-auto px-6 py-24">
+          <div className="text-center mb-16">
+            <RevealText el="h2" text="From meeting to insight in four steps." className="text-3xl font-bold tracking-tight" />
           </div>
-          <h2 className="text-lg font-medium text-[var(--text-primary)] mb-2">
-            No meetings yet
-          </h2>
-          <p className="text-sm text-[var(--text-muted)] max-w-sm mx-auto mb-8">
-            Create a meeting to send an AI bot that joins, transcribes, and analyzes the conversation automatically.
-          </p>
-          <Link href="/meetings/new" className="btn-primary">
-            Create your first meeting
-          </Link>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {meetings.map((meeting, i) => (
-            <Link
-              key={meeting.id}
-              href={`/meetings/${meeting.id}`}
-              className={`block group reveal reveal-delay-${Math.min(i + 1, 5)}`}
-            >
-              <div className="flex items-center justify-between py-4 px-5 rounded-xl border border-transparent hover:border-[var(--border)] hover:bg-[var(--bg-card)] transition-all duration-300">
-                <div className="flex items-center gap-4">
-                  <div className="w-9 h-9 rounded-lg bg-[var(--bg-tertiary)] flex items-center justify-center group-hover:bg-[var(--accent-dim)] transition-colors duration-300">
-                    <span className="text-xs text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-colors duration-300">
-                      {meeting.title.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-[var(--text-primary)]">{meeting.title}</h3>
-                    <p className="text-xs text-[var(--text-muted)] mt-0.5">
-                      {new Date(meeting.scheduled_at).toLocaleDateString("es-ES", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
-                      {meeting.participants.length > 0 && ` · ${meeting.participants.join(", ")}`}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-[11px] text-[var(--text-muted)]">{meeting.platform.replace(/_/g, " ")}</span>
-                  <StatusPill status={meeting.status} />
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[
+              { n: "01", t: "Send the link", d: "Paste your meeting URL into MeetMind." },
+              { n: "02", t: "Bot joins", d: "Our AI bot connects and starts recording." },
+              { n: "03", t: "AI analyzes", d: "LangGraph + Gemini extract insights in real time." },
+              { n: "04", t: "Review & act", d: "Get a live dashboard and executive summary." },
+            ].map((step, i) => (
+              <motion.div
+                key={step.n}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="card p-5"
+              >
+                <span className="text-xs text-[var(--text-muted)] font-mono">{step.n}</span>
+                <h3 className="text-sm font-medium mt-3 mb-1.5">{step.t}</h3>
+                <p className="text-xs text-[var(--text-muted)] leading-relaxed">{step.d}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="max-w-3xl mx-auto px-6 py-32 text-center">
+          <RevealText el="h2" text="Stop taking notes. Start acting on them." className="text-4xl font-bold tracking-tight mb-6" />
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+          >
+            <Link href="/login" className="btn-primary text-base px-8 py-3">Get started free</Link>
+          </motion.div>
+        </section>
+
+        {/* FOOTER */}
+        <footer className="border-t border-[var(--border)] py-8">
+          <div className="max-w-6xl mx-auto px-6 flex items-center justify-between text-xs text-[var(--text-muted)]">
+            <span>© 2026 MeetMind</span>
+            <span>Built with FastAPI, LangGraph &amp; Next.js</span>
+          </div>
+        </footer>
+      </main>
+    </>
   );
 }
 
-function StatusPill({ status }: { status: string }) {
-  const config: Record<string, { bg: string; text: string; dot?: boolean }> = {
-    scheduled: { bg: "var(--bg-tertiary)", text: "var(--text-muted)" },
-    bot_created: { bg: "var(--info-dim)", text: "var(--info)" },
-    connecting: { bg: "var(--warning-dim)", text: "var(--warning)", dot: true },
-    in_progress: { bg: "var(--success-dim)", text: "var(--success)", dot: true },
-    completed: { bg: "var(--accent-dim)", text: "var(--accent)" },
-    failed: { bg: "var(--danger-dim)", text: "var(--danger)" },
-  };
-  const c = config[status] || config.scheduled;
-
+function ShowcaseRow({
+  eyebrow,
+  title,
+  description,
+  children,
+  reverse,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+  children: React.ReactNode;
+  reverse?: boolean;
+}) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium" style={{ background: c.bg, color: c.text }}>
-      {c.dot && <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: c.text }} />}
-      {status.replace(/_/g, " ")}
-    </span>
+    <div className={`grid grid-cols-1 md:grid-cols-2 gap-12 items-center ${reverse ? "md:[direction:rtl]" : ""}`}>
+      <div style={{ direction: "ltr" }}>
+        <motion.span
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-xs text-[var(--text-muted)] font-mono uppercase tracking-wider"
+        >
+          {eyebrow}
+        </motion.span>
+        <RevealText el="h2" text={title} className="text-3xl font-bold tracking-tight mt-3 mb-4" />
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="text-[var(--text-secondary)] leading-relaxed"
+        >
+          {description}
+        </motion.p>
+      </div>
+      <motion.div
+        style={{ direction: "ltr" }}
+        initial={{ opacity: 0, scale: 0.96 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {children}
+      </motion.div>
+    </div>
   );
 }
