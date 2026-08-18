@@ -154,14 +154,14 @@ function InsightsView({ insights }: { insights: Insight[] }) {
               {items.map((item, i) => (
                 <div key={i} className="border-b border-[var(--border)] last:border-0 pb-3 last:pb-0">
                   <p className="text-sm text-[var(--text)]">
-                    {(item.data.task || item.data.decision || item.data.description || item.data.question) as string}
+                    {String(item.data.task || item.data.decision || item.data.description || item.data.question || "")}
                   </p>
                   <div className="flex items-center gap-2 mt-1.5">
-                    {item.data.assignee && <span className="text-xs text-blue-400">@{item.data.assignee as string}</span>}
-                    {item.data.deadline && <span className="text-xs text-[var(--text-muted)]">{item.data.deadline as string}</span>}
-                    {item.data.decision_maker && <span className="text-xs text-[var(--text-muted)]">by {item.data.decision_maker as string}</span>}
-                    {item.data.severity && <span className="text-xs text-amber-400">{item.data.severity as string}</span>}
-                    {item.data.asked_by && <span className="text-xs text-[var(--text-muted)]">by {item.data.asked_by as string}</span>}
+                    {item.data.assignee ? <span className="text-xs text-blue-400">@{String(item.data.assignee)}</span> : null}
+                    {item.data.deadline ? <span className="text-xs text-[var(--text-muted)]">{String(item.data.deadline)}</span> : null}
+                    {item.data.decision_maker ? <span className="text-xs text-[var(--text-muted)]">by {String(item.data.decision_maker)}</span> : null}
+                    {item.data.severity ? <span className="text-xs text-amber-400">{String(item.data.severity)}</span> : null}
+                    {item.data.asked_by ? <span className="text-xs text-[var(--text-muted)]">by {String(item.data.asked_by)}</span> : null}
                   </div>
                 </div>
               ))}
