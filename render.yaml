@@ -1,0 +1,66 @@
+databases:
+  - name: meetmind-db
+    plan: free
+    databaseName: meetmind
+    user: meetmind
+
+services:
+  # Backend API
+  - type: web
+    name: meetmind-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile.prod
+    dockerContext: ./backend
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: meetmind-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: meetmind-redis
+          type: redis
+          property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: RECALL_AI_API_KEY
+        sync: false
+      - key: RECALL_REGION
+        value: eu-central-1
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: SECRET_KEY
+        generateValue: true
+      - key: RECALL_WEBHOOK_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        fromService:
+          name: meetmind-web
+          type: web
+          property: host
+    healthCheckPath: /health/
+
+  # Frontend Dashboard
+  - type: web
+    name: meetmind-web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./dashboard/Dockerfile.prod
+    dockerContext: ./dashboard
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          name: meetmind-api
+          type: web
+          property: hostport
+      - key: NEXT_PUBLIC_WS_URL
+        value: wss://meetmind-api.onrender.com
+
+  # Redis
+  - type: redis
+    name: meetmind-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
