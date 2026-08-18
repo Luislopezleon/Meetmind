@@ -64,3 +64,4 @@ services:
     name: meetmind-redis
     plan: free
     maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
